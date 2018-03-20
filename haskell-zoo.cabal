@@ -16,8 +16,10 @@ extra-source-files:  README.md
 library
   hs-source-dirs: src
   exposed-modules:     Basic.Sample
+                     , MonoidAndSemigroup.Sample
   default-language:    Haskell2010
   build-depends:       base               >= 4.8 && < 5.0
+                     , semigroups
 
 executable haskell-zoo
   hs-source-dirs:      src

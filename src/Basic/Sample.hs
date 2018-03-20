@@ -1,6 +1,4 @@
-module Basic.Sample 
-  ( sample
-  ) where
+module Basic.Sample where
 
 import Prelude hiding (map, filter, foldl, foldr)
 ---
