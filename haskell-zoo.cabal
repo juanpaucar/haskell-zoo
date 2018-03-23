@@ -27,3 +27,15 @@ executable haskell-zoo
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
                      , haskell-zoo
+
+test-suite test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      spec
+  main-is:             Spec.hs
+  other-modules:       MonoidAndSemigroup.SampleSpec
+  build-depends:       base               >= 4.8 && < 5.0
+                     , haskell-zoo
+                     , hspec
+                     , QuickCheck
+  default-language:    Haskell2010
+
