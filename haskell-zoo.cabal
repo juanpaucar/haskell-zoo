@@ -17,6 +17,7 @@ library
   hs-source-dirs: src
   exposed-modules:     Basic.Sample
                      , MonoidAndSemigroup.Sample
+                     , Traversable.Sample
   default-language:    Haskell2010
   build-depends:       base               >= 4.8 && < 5.0
                      , semigroups
@@ -33,9 +34,21 @@ test-suite test
   hs-source-dirs:      spec
   main-is:             Spec.hs
   other-modules:       MonoidAndSemigroup.SampleSpec
+                     , Traversable.SampleSpec
   build-depends:       base               >= 4.8 && < 5.0
                      , haskell-zoo
                      , hspec
                      , QuickCheck
   default-language:    Haskell2010
 
+benchmark bench-builder-all
+  type:             exitcode-stdio-1.0
+  hs-source-dirs:   benchmark
+  main-is:          unboxed.hs
+  build-depends:    base
+                  , criterion
+  ghc-options:      -O2
+  -fglasgow-exts
+  -fmax-simplifier-iterations=10
+  -fdicts-cheap
+  -fspec-constr-count=6
