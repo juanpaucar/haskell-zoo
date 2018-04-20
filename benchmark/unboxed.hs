@@ -1,8 +1,10 @@
-{-# LANGUAGE TypeOperators #-}
+{-# LANGUAGE MagicHash #-}
+
+import GHC.Prim
 
 import Criterion.Main
 
-import GHC.Exts
+{-import GHC.Exts-}
 
 
 sum :: Int -> Int -> Int

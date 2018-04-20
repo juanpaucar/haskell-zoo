@@ -26,18 +26,15 @@ identity a = (a `mappend` mempty) == a &&
 concatSemigroup :: (Eq a, Semigroup a, Monoid a) => a -> a -> Bool
 concatSemigroup a b = (a `mappend` b) == (a <> b)
 
-
 spec :: Spec
 spec = do
   describe "Monoid" $ do
-    it "satisfies the associative property for mappedn" $
-      quickCheck (associativity :: MyList Int -> MyList Int -> MyList Int -> Bool)
+    prop "satisfies the associative property for mappedn" $ forAll arbitraryMyList $ \list ->
+      associativity (list :: MyList Int) (list :: MyList Int) (list :: MyList Int)
 
     prop "satisfies identity property for monoids" $ forAll arbitraryMyList $ \list ->
       identity (list :: MyList Int)
 
   describe "Semigroup" $
-    it "satisfies that <> is mappend for monoids" $
-      quickCheck (concatSemigroup :: MyList Int -> MyList Int -> Bool)
-
--- TODO: use arbitrary for functions
+    prop "satisfies that <> is mappend for monoids" $ forAll arbitraryMyList $ \list ->
+      concatSemigroup (list :: MyList Int) (list :: MyList Int)
