@@ -11,3 +11,5 @@ before_install:
 
 script:
   - stack build --no-terminal --skip-ghc-check --test --no-run-tests --bench --no-run-benchmarks
+  - stack test
+  - stack bench
