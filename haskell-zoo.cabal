@@ -39,6 +39,8 @@ test-suite test
                      , haskell-zoo
                      , hspec
                      , QuickCheck
+                     , semigroups
+                     , transformers
   default-language:    Haskell2010
 
 benchmark bench-builder-all

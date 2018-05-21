@@ -1,7 +1,17 @@
+{-# LANGUAGE CPP #-}
+
 module Traversable.Sample where
 
 import Basic.Sample (MyList(..))
 import MonoidAndSemigroup.Sample
+
+#if !MIN_VERSION_base(4,8,0)
+import Control.Applicative
+import Data.Foldable
+import Data.Monoid
+import Data.Traversable
+#endif
+
 
 instance Functor MyList where
   fmap _ Nil = Nil
