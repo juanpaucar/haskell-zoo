@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE FlexibleContexts #-}
 
 module Traversable.SampleSpec where
@@ -5,6 +6,13 @@ module Traversable.SampleSpec where
 import Test.Hspec
 import Test.Hspec.QuickCheck
 import Test.QuickCheck
+
+#if !MIN_VERSION_base(4,8,0)
+import Control.Applicative
+import Data.Foldable
+import Data.Monoid
+import Data.Traversable
+#endif
 
 import Data.Functor.Identity
 
@@ -30,8 +38,10 @@ naturality a = (t . traverse f $ a) == (traverse (t . f) a)
     t = myReverse
 -------------------------------------------------------------------------------
 
+#if MIN_VERSION_base(4,8,0)
 identity :: (Eq (t b), Traversable t) => t b -> Bool
 identity a = (traverse Identity a) == (Identity a)
+#endif
 -------------------------------------------------------------------------------
 
 newtype Compose f g a = Compose (f (g a))
@@ -56,5 +66,7 @@ spec =
     prop "satisfies the naturality property" $ forAll arbitraryMyList $ \list ->
       naturality (list :: MyList Int)
 
+#if MIN_VERSION_base(4,8,0)
     prop "satisfies the identity property" $ forAll arbitraryMyList $ \list ->
       identity (list :: MyList Int)
+#endif

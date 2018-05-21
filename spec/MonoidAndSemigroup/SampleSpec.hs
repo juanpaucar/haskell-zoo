@@ -1,3 +1,5 @@
+{-# LANGUAGE CPP #-}
+
 module MonoidAndSemigroup.SampleSpec where
 
 import Test.Hspec
@@ -6,6 +8,10 @@ import Test.QuickCheck
 
 import Control.Monad
 import Data.Semigroup
+
+#if !MIN_VERSION_base(4,8,0)
+import Control.Applicative
+#endif
 
 import Basic.Sample
 import MonoidAndSemigroup.Sample ()
