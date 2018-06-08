@@ -18,9 +18,15 @@ library
   exposed-modules:     Basic.Sample
                      , MonoidAndSemigroup.Sample
                      , Traversable.Sample
+                     , ParMonad.Sample
+                     , Eval.Sample
   default-language:    Haskell2010
   build-depends:       base               >= 4.7 && < 5.0
+                     , monad-par
+                     , parallel
                      , semigroups
+  ghc-options:         -threaded -rtsopts -eventlog
+                     
 
 executable haskell-zoo
   hs-source-dirs:      src
@@ -28,6 +34,9 @@ executable haskell-zoo
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
                      , haskell-zoo
+                     , monad-par
+                     , parallel
+  ghc-options:         -threaded -rtsopts -eventlog
 
 test-suite test
   type:                exitcode-stdio-1.0
