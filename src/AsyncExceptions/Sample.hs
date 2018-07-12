@@ -1,3 +1,5 @@
+{-# LANGUAGE CPP #-}
+
 module AsyncExceptions.Sample where
 
 import Data.ByteString.Char8 (pack)
@@ -6,6 +8,10 @@ import Data.ByteString (ByteString)
 import qualified Data.ByteString as B
 import Network.HTTP
 import Text.Printf
+
+#if !MIN_VERSION_base(4,8,0)
+import Control.Applicative
+#endif
 
 
 getURL :: String -> IO ByteString
