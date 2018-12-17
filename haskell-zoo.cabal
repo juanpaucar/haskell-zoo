@@ -23,6 +23,7 @@ library
                      , ParMonad.Sample
                      , Eval.Sample
                      , RankNTypes.Sample
+                     , Vector.Sample
   default-language:    Haskell2010
   build-depends:       base               >= 4.7 && < 5.0
                      , async
