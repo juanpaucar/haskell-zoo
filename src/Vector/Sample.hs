@@ -4,12 +4,14 @@
 
 module Vector.Sample where
 
+import Control.Monad            (forM)
 import Data.Word                (Word8)
 import Data.Proxy               
 import Foreign.ForeignPtr       (ForeignPtr, withForeignPtr)
 import Foreign.Ptr              (Ptr, plusPtr)
-import Foreign.Storable         (peekByteOff, pokeByteOff, sizeOf, Storable(..))
+import Foreign.Storable         (Storable(..) )
 import Foreign.C.Types          (CSize(..))
+import Data.List
 
 import GHC.ForeignPtr           (ForeignPtr(ForeignPtr), mallocPlainForeignPtrBytes)
 import GHC.Ptr                  (Ptr(..), castPtr)
@@ -25,6 +27,12 @@ instance Functor IVector where
 data MVector a = MV {-# UNPACK #-} !(ForeignPtr a) -- data
                     {-# UNPACK #-} !Int            -- offset
                     {-# UNPACK #-} !Int            -- length
+
+instance (Show a, Storable a) => Show (MVector a) where
+  show (MV fp o l) = unsafeDupablePerformIO $ withForeignPtr fp $ \ptra -> do
+                          list <- forM [0..(l-1)] $ \pos -> do
+                                    show <$> peekElemOff ptra pos
+                          pure $ "|" <> intercalate "," list <> "|"
 
 sizeOfVector :: forall a. Storable a => a -> Int -> Int
 sizeOfVector _ l = fromIntegral (l * sizeOf (undefined :: a))
@@ -65,4 +73,18 @@ concat (MV fpa  offa lena) (MV fpb offb lenb) =
     withForeignPtr fpa $ \pa -> memcpy ptra (pa `plusPtr` offa) lena
     withForeignPtr fpb $ \pb -> memcpy ptrb (pb `plusPtr` offb) lenb
 
-  
+
+fromList :: Storable a => [a] -> IO (MVector a)
+--fromList [] = MV undefined undefined 0
+fromList xs = do
+  let l = length xs
+  v <- create (fromIntegral l) (fromList' 0 xs)
+  return v
+  where
+    fromList' _ [] _ = pure ()
+    fromList' i (x:xs) ptr = do
+                              pokeElemOff ptr i x
+                              fromList' (i+1) xs ptr
+    
+
+-- TODO: toList
