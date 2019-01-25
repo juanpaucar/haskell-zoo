@@ -54,6 +54,7 @@ test-suite test
   main-is:             Spec.hs
   other-modules:       MonoidAndSemigroup.SampleSpec
                      , Traversable.SampleSpec
+                     , Vector.SampleSpec
   build-depends:       base               >= 4.7 && < 5.0
                      , haskell-zoo
                      , hspec
