@@ -7,13 +7,6 @@ import Test.Hspec
 import Test.Hspec.QuickCheck
 import Test.QuickCheck
 
-#if !MIN_VERSION_base(4,8,0)
-import Control.Applicative
-import Data.Foldable
-import Data.Monoid
-import Data.Traversable
-#endif
-
 import Data.Functor.Identity
 
 import Basic.Sample
@@ -22,17 +15,16 @@ import MonoidAndSemigroup.Sample ()
 
 arbitraryMyList :: Arbitrary a => Gen (MyList a)
 arbitraryMyList = fromList <$> sized (\n ->  choose (0, n) >>= flip vectorOf arbitrary)
-  where fromList [] = Nil
-        fromList (x:xs) = Cons x (fromList xs)
+  where fromList = Prelude.foldr Cons Nil
 
 myReverse :: MyList a -> MyList a
 myReverse Nil = Nil
-myReverse (Cons x xs) = myReverse xs `mappend` (Cons x Nil)
+myReverse (Cons x xs) = myReverse xs `mappend` Cons x Nil
 
 -------------------------------------------------------------------------------
 
 naturality :: (Eq (t b), Traversable t) => t b -> Bool
-naturality a = (t . traverse f $ a) == (traverse (t . f) a)
+naturality a = (t . traverse f $ a) == traverse (t . f) a
   where
     f = pure
     t = myReverse
@@ -53,7 +45,7 @@ instance (Applicative f, Applicative g) => Applicative (Compose f g) where
   pure x = Compose (pure (pure x))
   Compose f <*> Compose x = Compose ((<*>) <$> f <*> x)
 
-composition :: (Eq (Compose MyList MyList (t b)), Traversable t) => 
+composition :: (Eq (Compose MyList MyList (t b)), Traversable t) =>
   t (MyList (MyList b)) -> Bool
 composition a = (traverse (Compose . fmap g . f) a) == (Compose . fmap (traverse g) . traverse f $ a)
   where
